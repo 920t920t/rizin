@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { loadFighters, loadBouts } from '../../lib/data';
+const fighters = await loadFighters();
+const bouts = await loadBouts();
+const nameMap: Record<string,string> = Object.fromEntries(fighters.map(f=>[f.id,f.name]));
+---
+<BaseLayout title="マイページ | RIZIN 選手名鑑" description="あなたの勝利予想（端末内）。ログイン連携は次フェーズで対応します。">
+  <h1>マイページ（MVP）</h1>
+  <p class="muted">このページの内容は端末に保存された予想に基づきます。ログイン連携後にサーバ保存へ切り替え予定です。</p>
+  <section style="margin-top:12px;">
+    <h2>あなたの予想</h2>
+    <div id="mypreds" class="grid" style="grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;"></div>
+    <p id="none" class="muted">予想がありません。<a href={`${import.meta.env.BASE_URL}predict`}>勝利予想</a>から登録してください。</p>
+  </section>
+ </BaseLayout>
+
+<script define:vars={{ fights: bouts, nameMap: Object.fromEntries(fighters.map(f=>[f.id,f.name])) }}>
+  const KEY='predictions';
+  function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||'{}'); }catch{return {}} }
+  function render(){
+    const box=document.getElementById('mypreds');
+    const none=document.getElementById('none');
+    if(!box) return;
+    box.innerHTML='';
+    const preds=load();
+    const entries=Object.entries(preds);
+    if(entries.length===0){ none?.classList.remove('hidden'); return; }
+    none?.classList.add('hidden');
+    entries.forEach(([boutId,pick])=>{
+      const fight=fights.find(f=>f.id===boutId);
+      if(!fight) return;
+      const card=document.createElement('div'); card.className='card';
+      card.innerHTML=`<div style="margin-bottom:6px;"><strong>${nameMap[fight.fighterId]||fight.fighterId}</strong> vs <strong>${nameMap[fight.opponentId]||fight.opponentId}</strong></div>
+      <div class=\"muted\" style=\"font-size:12px;margin-bottom:6px;\">${fight.event||''} ${fight.notes||''}</div>
+      <div>あなたの予想: <strong>${nameMap[pick]||pick}</strong></div>`;
+      box.appendChild(card);
+    });
+  }
+  render();
+</script>

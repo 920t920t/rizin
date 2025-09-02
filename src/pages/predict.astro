@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { loadBouts, loadFighters } from '../lib/data';
+const bouts = await loadBouts();
+const fighters = await loadFighters();
+const nameMap: Record<string,string> = Object.fromEntries(fighters.map(f=>[f.id,f.name]));
+---
+<BaseLayout title="勝利予想 | RIZIN 選手名鑑" description="RIZINの注目カードで勝利予想。ログインは後日対応。今は端末に保存されます。">
+  <h1>勝利予想（MVP）</h1>
+  <p class="muted">予想は端末に保存されます（ログイン連携は後日対応）。エクスポートして集計も可能です。</p>
+  <div id="pred-list" class="grid" style="grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;">
+    {bouts.map(b => (
+      <div class="card" data-id={b.id}>
+        <div style="margin-bottom:8px;">
+          <strong>{nameMap[b.fighterId] ?? b.fighterId}</strong> vs <strong>{nameMap[b.opponentId] ?? b.opponentId}</strong>
+        </div>
+        <div class="muted" style="font-size:12px;margin-bottom:8px;">{b.event ?? ''} {b.notes ?? ''}</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn" data-pick={b.fighterId}>{nameMap[b.fighterId] ?? b.fighterId} 勝利</button>
+          <button class="btn" data-pick={b.opponentId}>{nameMap[b.opponentId] ?? b.opponentId} 勝利</button>
+        </div>
+        <div class="muted" style="font-size:12px;margin-top:6px;" id={`res-${b.id}`}></div>
+      </div>
+    ))}
+  </div>
+  <div style="margin-top:12px;display:flex;gap:8px;">
+    <button id="export-pred" class="btn">予想をエクスポート</button>
+    <button id="clear-pred" class="btn">予想をクリア</button>
+  </div>
+</BaseLayout>
+
+<script>
+  const KEY='predictions';
+  function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||'{}'); }catch{return {}} }
+  function save(data){ localStorage.setItem(KEY, JSON.stringify(data)); }
+  function setPick(boutId, fighterId){ const d=load(); d[boutId]=fighterId; save(d); }
+  function getPick(boutId){ const d=load(); return d[boutId]; }
+  function refresh(){
+    document.querySelectorAll('[data-id]')?.forEach(card=>{
+      const id=card.getAttribute('data-id');
+      const picked=getPick(id);
+      const res=document.getElementById(`res-${id}`);
+      if (res) res.textContent = picked ? `あなたの予想: ${picked}` : '未選択';
+      card.querySelectorAll('[data-pick]')?.forEach(btn=>{
+        const v=btn.getAttribute('data-pick');
+        btn.classList.toggle('primary', v===picked);
+      });
+    });
+  }
+  document.querySelectorAll('[data-pick]')?.forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const v=btn.getAttribute('data-pick');
+      const card=btn.closest('[data-id]');
+      const id=card?.getAttribute('data-id');
+      if(id && v){ setPick(id, v); refresh(); }
+    });
+  });
+  document.getElementById('export-pred')?.addEventListener('click',()=>{
+    const blob=new Blob([JSON.stringify({ exportedAt:new Date().toISOString(), predictions: load() },null,2)],{type:'application/json'});
+    const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='predictions.json';a.click();URL.revokeObjectURL(url);
+  });
+  document.getElementById('clear-pred')?.addEventListener('click',()=>{ save({}); refresh(); });
+  refresh();
+</script>
+
