@@ -90,4 +90,14 @@ const { fighters } = Astro.props as { fighters: Fighter[] };
   q?.addEventListener('input', apply);
   sort?.addEventListener('change', apply);
   apply();
+
+  // Shortcut: / で検索にフォーカス（フォーム内入力時は無効）
+  document.addEventListener('keydown', (e) => {
+    const target = e.target as HTMLElement | null;
+    const isFormField = target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.tagName === 'SELECT' || target.getAttribute('contenteditable') === 'true');
+    if (!isFormField && e.key === '/') {
+      e.preventDefault();
+      (q as HTMLInputElement | null)?.focus();
+    }
+  });
 </script>

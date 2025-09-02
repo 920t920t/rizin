@@ -9,7 +9,10 @@ const { fighterId, opponentId, initialCount = 0, cooldownMs = 24 * 60 * 60 * 100
 const matchupKey = normalizeMatchupKey(fighterId, opponentId);
 ---
 <div class="vote" data-key={matchupKey}>
-  <button class="btn primary" id={`vote-${matchupKey}`} aria-pressed="false">見たい</button>
+  <button class="btn primary" id={`vote-${matchupKey}`} aria-pressed="false">
+    見たい
+    <span id={`badge-${matchupKey}`} class="pill" style="margin-left:6px;font-size:12px;padding:0 6px;"></span>
+  </button>
   <span id={`count-${matchupKey}`} class="pill" aria-live="polite" data-base={initialCount}>{initialCount}</span>
   <span id={`cool-${matchupKey}`} class="muted" style="margin-left:8px;font-size:12px;"></span>
 </div>
@@ -17,6 +20,7 @@ const matchupKey = normalizeMatchupKey(fighterId, opponentId);
   const btn = document.getElementById(`vote-${key}`);
   const countEl = document.getElementById(`count-${key}`);
   const coolEl = document.getElementById(`cool-${key}`);
+  const badgeEl = document.getElementById(`badge-${key}`);
 
   const lastKey = `vote:last:${key}`;
   const deltaKey = `vote:delta:${key}`;
@@ -61,7 +65,9 @@ const matchupKey = normalizeMatchupKey(fighterId, opponentId);
     btn.setAttribute('aria-disabled', ok ? 'false' : 'true');
     btn.setAttribute('aria-pressed', ok ? 'false' : 'true');
     btn.toggleAttribute('disabled', !ok);
-    coolEl.textContent = ok ? '' : `次回まで ${fmt(remaining())}`;
+    const rem = remaining();
+    coolEl.textContent = ok ? '' : `次回まで ${fmt(rem)}`;
+    if (badgeEl) badgeEl.textContent = ok ? '' : `${fmt(rem)}`;
   }
 
   let timer;
