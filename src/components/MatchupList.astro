@@ -6,7 +6,14 @@ const { bouts, votes } = Astro.props as { bouts: Bout[]; votes: VoteCounts };
 <section aria-labelledby="featured-heading" style="margin-top:16px;">
   <h2 id="featured-heading">注目マッチアップ</h2>
   <div class="grid" role="list">
-    {bouts.map((b) => {
+    {(bouts
+      .slice()
+      .sort((a, b) => {
+        const ka = [a.fighterId, a.opponentId].sort().join('_');
+        const kb = [b.fighterId, b.opponentId].sort().join('_');
+        return (votes[kb] ?? 0) - (votes[ka] ?? 0);
+      })
+    ).map((b) => {
       const key = [b.fighterId, b.opponentId].sort().join('_');
       const initial = votes[key] ?? 0;
       return (
@@ -64,4 +71,3 @@ const { bouts, votes } = Astro.props as { bouts: Bout[]; votes: VoteCounts };
     downloadJSON(data, 'local_votes.json');
   });
 </script>
-

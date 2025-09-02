@@ -10,8 +10,9 @@ export async function getStaticPaths() {
 }
 
 const { fighter } = Astro.props as { fighter: Fighter };
+const desc = (fighter.wikipedia?.lead && String(fighter.wikipedia.lead).slice(0, 120) + (String(fighter.wikipedia.lead).length > 120 ? '…' : '')) || `${fighter.name} のプロフィール`;
 ---
-<BaseLayout title={`${fighter.name} | RIZIN 選手名鑑`}>
+<BaseLayout title={`${fighter.name} | RIZIN 選手名鑑`} description={desc}>
   <article>
     <a href={`${import.meta.env.BASE_URL}fighters`} class="muted">← 一覧へ</a>
     <h1 style="margin-bottom:4px;">{safeText(fighter.name)}</h1>

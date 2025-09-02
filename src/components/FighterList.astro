@@ -6,7 +6,8 @@ const { fighters } = Astro.props as { fighters: Fighter[] };
 <section aria-labelledby="fighters-heading">
   <h2 id="fighters-heading">選手一覧</h2>
   <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0 12px;">
-    <input id="q" type="search" placeholder="名前・読み・所属で検索" class="card" style="padding:8px;min-width:260px;" aria-label="検索" />
+    <label class="muted" for="q">検索:</label>
+    <input id="q" type="search" placeholder="名前・読み・所属で検索" class="card" style="padding:8px;min-width:260px;" aria-describedby="results-count" />
     <label class="muted" for="sort">並び替え:</label>
     <select id="sort" class="card" style="padding:8px;">
       <option value="name">名前 (あ→わ)</option>
@@ -14,7 +15,8 @@ const { fighters } = Astro.props as { fighters: Fighter[] };
       <option value="wins">勝ち数 (多→少)</option>
     </select>
   </div>
-  <div id="fighters-list" class="grid cards" role="list">
+  <div id="results-count" class="muted" style="margin: -6px 0 8px 0; font-size: 12px;" aria-live="polite"></div>
+  <div id="fighters-list" class="grid cards" role="list" aria-label="検索結果">
     {fighters.map((f) => (
       <div role="listitem" data-name={f.name} data-kana={f.kana ?? ''} data-weight={f.weightClass ?? ''} data-affiliation={f.affiliation ?? ''} data-wins={String(f.record?.wins ?? 0)}>
         <FighterCard fighter={f} />
@@ -30,6 +32,7 @@ const { fighters } = Astro.props as { fighters: Fighter[] };
   const list = document.getElementById('fighters-list');
   const q = document.getElementById('q');
   const sort = document.getElementById('sort');
+  const count = document.getElementById('results-count');
 
   const items = () => Array.from(list?.children || []);
 
@@ -64,12 +67,25 @@ const { fighters } = Astro.props as { fighters: Fighter[] };
     const mode = (sort instanceof HTMLSelectElement) ? sort.value : 'name';
     const els = items();
     const frag = document.createDocumentFragment();
-    els
+    const filtered = els
       .filter((el) => matches(el, term))
-      .sort((a, b) => compare(a, b, mode))
-      .forEach((el) => frag.appendChild(el));
+      .sort((a, b) => compare(a, b, mode));
+    filtered.forEach((el) => frag.appendChild(el));
     if (list) list.appendChild(frag);
+    if (count) count.textContent = `${filtered.length}件ヒット`;
+    // sync query params without reload
+    const url = new URL(location.href);
+    if (term) url.searchParams.set('q', term); else url.searchParams.delete('q');
+    if (mode && mode !== 'name') url.searchParams.set('sort', mode); else url.searchParams.delete('sort');
+    history.replaceState(null, '', url);
   }
+
+  // initialize from URL
+  const url = new URL(location.href);
+  const qParam = url.searchParams.get('q') || '';
+  const sParam = url.searchParams.get('sort') || 'name';
+  if (q instanceof HTMLInputElement) q.value = qParam;
+  if (sort instanceof HTMLSelectElement) sort.value = sParam;
 
   q?.addEventListener('input', apply);
   sort?.addEventListener('change', apply);
