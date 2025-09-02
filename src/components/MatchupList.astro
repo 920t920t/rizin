@@ -1,7 +1,8 @@
 ---
-import type { Bout, VoteCounts } from '@lib/types';
+import type { Bout, Fighter, VoteCounts } from '@lib/types';
 import VoteWidget from './VoteWidget.astro';
-const { bouts, votes } = Astro.props as { bouts: Bout[]; votes: VoteCounts };
+const { bouts, votes, fighters } = Astro.props as { bouts: Bout[]; votes: VoteCounts; fighters?: Fighter[] };
+const nameMap: Record<string, string> = Object.fromEntries((fighters ?? []).map(f => [f.id, f.name]));
 ---
 <section aria-labelledby="featured-heading" style="margin-top:16px;">
   <h2 id="featured-heading">注目マッチアップ</h2>
@@ -21,10 +22,14 @@ const { bouts, votes } = Astro.props as { bouts: Bout[]; votes: VoteCounts };
         <div class="card" role="listitem" data-key={key} data-votes={String(initial)}>
           <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
             <div>
-              <div><strong>{b.fighterId}</strong> vs <strong>{b.opponentId}</strong></div>
+              <div><strong>{nameMap[b.fighterId] ?? b.fighterId}</strong> vs <strong>{nameMap[b.opponentId] ?? b.opponentId}</strong></div>
               <div class="muted" style="font-size:12px;">{b.event ?? ''} {b.notes ?? ''}</div>
             </div>
             <VoteWidget fighterId={b.fighterId} opponentId={b.opponentId} initialCount={initial} />
+          </div>
+          <div style="margin-top:8px;display:flex;gap:8px;">
+            <button class="btn" data-share={key}>共有画像を作成</button>
+            <a class="btn" target="_blank" rel="noopener noreferrer" href={`https://twitter.com/intent/tweet?text=${encodeURIComponent('見たい対戦: ' + (nameMap[b.fighterId] ?? b.fighterId) + ' vs ' + (nameMap[b.opponentId] ?? b.opponentId))}&url=`}>Xで共有</a>
           </div>
         </div>
       );
@@ -95,5 +100,41 @@ const { bouts, votes } = Astro.props as { bouts: Bout[]; votes: VoteCounts };
   document.getElementById('export-votes')?.addEventListener('click', () => {
     const data = collectVotes();
     downloadJSON(data, 'local_votes.json');
+  });
+
+  // Share image generator (client-only)
+  function drawCard({w=1200,h=630,f1='Fighter A',f2='Fighter B',subtitle=''}){
+    const c=document.createElement('canvas');c.width=w;c.height=h;const g=c.getContext('2d');
+    const grd=g.createLinearGradient(0,0,w,h);grd.addColorStop(0,'#0b0b0b');grd.addColorStop(1,'#131313');g.fillStyle=grd;g.fillRect(0,0,w,h);
+    g.fillStyle='#222';g.fillRect(w/2-6,0,12,h);
+    g.fillStyle='#f5f5f5';g.font='bold 72px system-ui, -apple-system, Segoe UI, Roboto';g.textAlign='center';
+    g.fillText('RIZIN DREAM MATCH', w/2, 140);
+    g.font='bold 96px system-ui, -apple-system, Segoe UI, Roboto';
+    g.fillStyle='#e5e5e5';
+    g.fillText(f1, w*0.33, h/2);
+    g.fillText(f2, w*0.67, h/2);
+    g.fillStyle='#16a34a';g.font='bold 64px system-ui, -apple-system, Segoe UI, Roboto';
+    g.fillText('VS', w/2, h/2);
+    if(subtitle){g.fillStyle='#b5b5b5';g.font='32px system-ui, -apple-system, Segoe UI, Roboto';g.fillText(subtitle,w/2,h-80);} 
+    return c.toDataURL('image/png');
+  }
+
+  document.querySelectorAll('[data-share]')?.forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const key=btn.getAttribute('data-share');
+      const allStrong=document.querySelectorAll(`[data-key="${key}"] strong`);
+      const f1=(allStrong[0] && allStrong[0].textContent) || 'Fighter A';
+      const f2=(allStrong[1] && allStrong[1].textContent) || 'Fighter B';
+      const subtitle=document.querySelector(`[data-key="${key}"] .muted`)?.textContent?.trim() || '';
+      const url=drawCard({f1,f2,subtitle});
+      const aEl=document.createElement('a');aEl.href=url;aEl.download=`${key}.png`;aEl.click();
+      if (navigator.share && navigator.canShare) {
+        try{
+          const res=await fetch(url);const blob=await res.blob();
+          const file=new File([blob], `${key}.png`, {type:'image/png'});
+          if (navigator.canShare({files:[file]})) await navigator.share({files:[file], title:'RIZIN DREAM MATCH', text:`${f1} vs ${f2}`});
+        }catch(e){/* ignore */}
+      }
+    });
   });
 </script>
