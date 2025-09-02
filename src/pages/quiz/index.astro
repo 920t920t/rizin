@@ -1,34 +1,12 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import QuizQuestion from '../../components/QuizQuestion.astro';
+import QuizGame from '../../components/QuizGame.astro';
 import { loadFighters } from '../../lib/data';
 
 const fighters = await loadFighters();
-const weightClasses = Array.from(new Set(fighters.map((f) => f.weightClass).filter(Boolean))) as string[];
-
-function makeQuestion() {
-  const f = fighters[Math.floor(Math.random() * fighters.length)];
-  const correct = f.weightClass || '不明';
-  const pool = weightClasses.filter((w) => w !== correct);
-  const choices = [correct, ...pool.sort(() => 0.5 - Math.random()).slice(0, 3)];
-  // shuffle
-  for (let i = choices.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [choices[i], choices[j]] = [choices[j], choices[i]];
-  }
-  const answerIndex = choices.indexOf(correct);
-  return {
-    id: f.id,
-    text: `${f.name} の階級は？`,
-    choices,
-    answerIndex
-  };
-}
-
-const q = makeQuestion();
 ---
-<BaseLayout title="クイズ | RIZIN 選手名鑑" description="RIZIN選手の基本情報クイズ。矢印キーとEnterで回答可能。">
+<BaseLayout title="クイズ | RIZIN 選手名鑑" description="RIZIN選手の基本情報クイズ。5問連続で出題。矢印キーとEnterで回答可能。">
   <h1>クイズ</h1>
-  <QuizQuestion question={q} />
-  <p class="muted" style="margin-top:8px;">矢印キーで選択、Enterで回答。</p>
+  <QuizGame fighters={fighters} />
+  <p class="muted" style="margin-top:8px;">矢印キーで選択、Enterで回答。ベストスコアは端末に保存されます。</p>
 </BaseLayout>

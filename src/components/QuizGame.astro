@@ -1,0 +1,159 @@
+---
+import type { Fighter } from '@lib/types';
+const { fighters } = Astro.props as { fighters: Fighter[] };
+// 最小データに整形（クライアントへ渡す）
+const data = fighters.map(f => ({ id: f.id, name: f.name, weightClass: f.weightClass || '不明' }));
+const total = 5; // 出題数
+---
+<section id="quiz" aria-labelledby="quiz-heading" class="card" style="padding:12px;">
+  <h2 id="quiz-heading">クイズ（{total}問）</h2>
+  <div id="status" class="muted" style="font-size:14px;margin-bottom:8px;" aria-live="polite"></div>
+  <div id="qtext" style="margin-bottom:8px;"></div>
+  <div id="opts" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px;"></div>
+  <div id="result" class="muted" style="min-height:1.2em;margin-bottom:8px;" aria-live="polite"></div>
+  <div style="display:flex;gap:8px;">
+    <button id="next" class="btn" disabled>次へ</button>
+    <button id="restart" class="btn">リスタート</button>
+  </div>
+</section>
+
+<script define:vars={{ data, total }}>
+  const $ = (id) => document.getElementById(id);
+  const status = $('status');
+  const qtext = $('qtext');
+  const opts = $('opts');
+  const result = $('result');
+  const nextBtn = $('next');
+  const restartBtn = $('restart');
+
+  const BEST_KEY = 'quiz:bestScore';
+  const BEST_AT_KEY = 'quiz:bestAt';
+
+  function pick(arr, n) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a.slice(0, n);
+  }
+
+  function makeQuestionPool() {
+    // 重複を避けて最大 total 件の選手を選ぶ
+    const pool = pick(data, Math.min(total, data.length));
+    return pool;
+  }
+
+  function makeChoices(correct, all) {
+    const weights = Array.from(new Set(all.map(x => x.weightClass)));
+    const wrong = weights.filter(w => w !== correct);
+    const picked = pick(wrong, 3);
+    const choices = Array.from(new Set([correct, ...picked]));
+    // シャッフル
+    return pick(choices, choices.length);
+  }
+
+  let questions = [];
+  let idx = 0;
+  let score = 0;
+
+  function bestScore() {
+    return parseInt(localStorage.getItem(BEST_KEY) || '0', 10) || 0;
+  }
+  function setBestScore(s) {
+    localStorage.setItem(BEST_KEY, String(s));
+    localStorage.setItem(BEST_AT_KEY, new Date().toISOString());
+  }
+
+  function renderStatus() {
+    const best = bestScore();
+    status.textContent = `${idx + 1}/${questions.length}問目・スコア ${score}（ベスト ${best}）`;
+  }
+
+  function renderQuestion() {
+    const q = questions[idx];
+    qtext.textContent = `${q.name} の階級は？`;
+    opts.innerHTML = '';
+    result.textContent = '';
+    nextBtn.disabled = true;
+    const choices = makeChoices(q.weightClass, data);
+    choices.forEach((c, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'btn';
+      btn.textContent = c;
+      btn.setAttribute('data-i', String(i));
+      btn.addEventListener('click', () => submit(c, q.weightClass, btn));
+      opts.appendChild(btn);
+    });
+    // 矢印キー操作
+    let focusIdx = 0;
+    const buttons = Array.from(opts.querySelectorAll('button'));
+    if (buttons[0]) buttons[0].focus();
+    opts.addEventListener('keydown', (e) => {
+      if (!['ArrowDown','ArrowRight','ArrowUp','ArrowLeft','Enter',' '].includes(e.key)) return;
+      e.preventDefault();
+      if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+        focusIdx = (focusIdx + 1) % buttons.length;
+        buttons[focusIdx].focus();
+      } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+        focusIdx = (focusIdx - 1 + buttons.length) % buttons.length;
+        buttons[focusIdx].focus();
+      } else {
+        buttons[focusIdx].click();
+      }
+    }, { once: true });
+  }
+
+  function submit(choice, correct, clicked) {
+    const ok = choice === correct;
+    result.textContent = ok ? '正解！' : `不正解… 正解は「${correct}」`;
+    if (ok) score += 1;
+    opts.querySelectorAll('button').forEach((b) => {
+      b.toggleAttribute('disabled', true);
+      if (b.textContent === correct) b.classList.add('primary');
+    });
+    nextBtn.disabled = false;
+    renderStatus();
+  }
+
+  function finish() {
+    const best = bestScore();
+    if (score > best) setBestScore(score);
+    qtext.textContent = `結果: ${score} / ${questions.length}`;
+    opts.innerHTML = '';
+    result.textContent = 'リスタートで再挑戦できます。';
+    nextBtn.disabled = true;
+    renderStatus();
+  }
+
+  function next() {
+    if (idx + 1 >= questions.length) {
+      finish();
+      return;
+    }
+    idx += 1;
+    renderStatus();
+    renderQuestion();
+  }
+
+  function restart() {
+    questions = makeQuestionPool();
+    if (questions.length === 0) {
+      qtext.textContent = '問題を作成できません（データ不足）';
+      opts.innerHTML = '';
+      result.textContent = '';
+      nextBtn.disabled = true;
+      status.textContent = '';
+      return;
+    }
+    idx = 0;
+    score = 0;
+    renderStatus();
+    renderQuestion();
+  }
+
+  nextBtn?.addEventListener('click', next);
+  restartBtn?.addEventListener('click', restart);
+  restart();
+</script>
+
