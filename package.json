@@ -8,7 +8,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "check:votes": "node scripts/check-votes.mjs",
-    "fix:votes": "node scripts/check-votes.mjs --write"
+    "fix:votes": "node scripts/check-votes.mjs --write",
+    "fix:votes:out": "node scripts/check-votes.mjs --out data/votes.normalized.json"
   },
   "devDependencies": {
     "astro": "^4.12.2",

@@ -83,12 +83,15 @@ const { fighters } = Astro.props as { fighters: Fighter[] };
   // initialize from URL
   const url = new URL(location.href);
   const qParam = url.searchParams.get('q') || '';
-  const sParam = url.searchParams.get('sort') || 'name';
+  const sParam = url.searchParams.get('sort') || localStorage.getItem('fighters:sort') || 'name';
   if (q instanceof HTMLInputElement) q.value = qParam;
   if (sort instanceof HTMLSelectElement) sort.value = sParam;
 
   q?.addEventListener('input', apply);
-  sort?.addEventListener('change', apply);
+  sort?.addEventListener('change', () => { 
+    if (sort instanceof HTMLSelectElement) localStorage.setItem('fighters:sort', sort.value);
+    apply();
+  });
   apply();
 
   // Shortcut: / で検索にフォーカス（フォーム内入力時は無効）

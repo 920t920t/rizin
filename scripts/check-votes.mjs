@@ -5,9 +5,17 @@ import path from 'node:path';
 const root = process.cwd();
 const file = path.join(root, 'data', 'votes.json');
 
-const args = new Set(process.argv.slice(2));
+const argv = process.argv.slice(2);
+const args = new Set(argv);
 const WRITE = args.has('--write');
 const STRICT = args.has('--strict');
+let OUT = null;
+{
+  const i = argv.indexOf('--out');
+  if (i !== -1 && argv[i + 1]) {
+    OUT = argv[i + 1];
+  }
+}
 
 function normalizeKey(a, b) {
   return [a, b].sort().join('_');
@@ -69,10 +77,11 @@ async function main() {
   if (negatives) console.warn(`[votes] WARN: negative values found = ${negatives} (clamped to 0)`);
   if (merged) console.log(`[votes] info: merged (normalized) duplicate keys = ${merged}`);
 
-  if (WRITE) {
+  if (WRITE || OUT) {
+    const target = OUT ? path.isAbsolute(OUT) ? OUT : path.join(root, OUT) : file;
     const json = JSON.stringify(sorted, null, 2) + '\n';
-    await fs.writeFile(file, json, 'utf-8');
-    console.log(`[votes] wrote normalized file: ${file}`);
+    await fs.writeFile(target, json, 'utf-8');
+    console.log(`[votes] wrote normalized file: ${target}`);
   }
 
   if (STRICT && hasIssues) process.exit(1);
@@ -82,4 +91,3 @@ main().catch((e) => {
   console.error('[votes] ERROR:', e);
   process.exit(STRICT ? 1 : 0);
 });
-
