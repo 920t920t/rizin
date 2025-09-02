@@ -1,0 +1,13 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="404 Not Found | RIZIN 選手名鑑">
+  <h1>ページが見つかりません（404）</h1>
+  <p class="muted">お探しのページは存在しないか、移動しました。</p>
+  <ul>
+    <li><a href={`${import.meta.env.BASE_URL}`}>トップへ</a></li>
+    <li><a href={`${import.meta.env.BASE_URL}fighters`}>選手一覧へ</a></li>
+    <li><a href={`${import.meta.env.BASE_URL}quiz`}>クイズへ</a></li>
+  </ul>
+</BaseLayout>
+
