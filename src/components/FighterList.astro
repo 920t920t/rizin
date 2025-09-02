@@ -1,0 +1,19 @@
+---
+import type { Fighter } from '@lib/types';
+import FighterCard from './FighterCard.astro';
+const { fighters } = Astro.props as { fighters: Fighter[] };
+---
+<section aria-labelledby="fighters-heading">
+  <h2 id="fighters-heading">選手一覧</h2>
+  <div class="grid cards" role="list">
+    {fighters.map((f) => (
+      <div role="listitem">
+        <FighterCard fighter={f} />
+      </div>
+    ))}
+  </div>
+  {fighters.length === 0 && (
+    <p class="muted">選手データが見つかりません。</p>
+  )}
+</section>
+

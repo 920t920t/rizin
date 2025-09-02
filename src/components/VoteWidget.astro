@@ -1,0 +1,82 @@
+---
+import { normalizeMatchupKey } from '@lib/paths';
+const { fighterId, opponentId, initialCount = 0, cooldownMs = 24 * 60 * 60 * 1000 } = Astro.props as {
+  fighterId: string;
+  opponentId: string;
+  initialCount?: number;
+  cooldownMs?: number;
+};
+const matchupKey = normalizeMatchupKey(fighterId, opponentId);
+---
+<div class="vote" data-key={matchupKey}>
+  <button class="btn primary" id={`vote-${matchupKey}`} aria-pressed="false">見たい</button>
+  <span id={`count-${matchupKey}`} class="pill" aria-live="polite">{initialCount}</span>
+  <span id={`cool-${matchupKey}`} class="muted" style="margin-left:8px;font-size:12px;"></span>
+</div>
+<script define:vars={{ key: matchupKey, cooldownMs }}>
+  const btn = document.getElementById(`vote-${key}`);
+  const countEl = document.getElementById(`count-${key}`);
+  const coolEl = document.getElementById(`cool-${key}`);
+
+  const lastKey = `vote:last:${key}`;
+  const deltaKey = `vote:delta:${key}`;
+
+  function getNow() { return Date.now(); }
+
+  function getDelta() {
+    const v = localStorage.getItem(deltaKey);
+    return v ? parseInt(v, 10) || 0 : 0;
+  }
+  function setDelta(n) { localStorage.setItem(deltaKey, String(n)); }
+
+  function canVote() {
+    const last = localStorage.getItem(lastKey);
+    if (!last) return true;
+    const diff = getNow() - Date.parse(last);
+    return diff >= cooldownMs;
+  }
+
+  function remaining() {
+    const last = localStorage.getItem(lastKey);
+    if (!last) return 0;
+    const diff = cooldownMs - (getNow() - Date.parse(last));
+    return Math.max(0, diff);
+  }
+
+  function fmt(ms) {
+    const s = Math.ceil(ms / 1000);
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const ss = s % 60;
+    if (h > 0) return `${h}時間${m}分`;
+    if (m > 0) return `${m}分${ss}秒`;
+    return `${ss}秒`;
+  }
+
+  function syncUI() {
+    const localDelta = getDelta();
+    const base = parseInt(countEl.textContent || '0', 10) || 0;
+    countEl.textContent = String(base + localDelta);
+    const ok = canVote();
+    btn.setAttribute('aria-disabled', ok ? 'false' : 'true');
+    btn.toggleAttribute('disabled', !ok);
+    coolEl.textContent = ok ? '' : `再投票まで ${fmt(remaining())}`;
+  }
+
+  let timer;
+  function startTicker() {
+    if (timer) clearInterval(timer);
+    timer = setInterval(syncUI, 1000);
+  }
+
+  btn?.addEventListener('click', () => {
+    if (!canVote()) return;
+    const localDelta = getDelta();
+    setDelta(localDelta + 1);
+    localStorage.setItem(lastKey, new Date().toISOString());
+    syncUI();
+  });
+
+  syncUI();
+  startTicker();
+</script>

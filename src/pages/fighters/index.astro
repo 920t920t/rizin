@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FighterList from '../../components/FighterList.astro';
+import MatchupList from '../../components/MatchupList.astro';
+import { loadBouts, loadFighters, loadVotes } from '../../lib/data';
+
+const fighters = await loadFighters();
+const bouts = await loadBouts();
+const votes = await loadVotes();
+---
+<BaseLayout title="選手一覧 | RIZIN 選手名鑑">
+  <FighterList fighters={fighters} />
+  <MatchupList bouts={bouts} votes={votes} />
+</BaseLayout>
+

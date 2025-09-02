@@ -1,0 +1,45 @@
+[
+  {
+    "id": "rzn_0001",
+    "name": "朝倉 未来",
+    "kana": "あさくら みくる",
+    "weightClass": "フェザー級",
+    "affiliation": "トライフォース赤坂",
+    "record": { "wins": 16, "losses": 4, "draws": 0, "noContests": 0 },
+    "wikipedia": {
+      "title": "朝倉未来",
+      "lang": "ja",
+      "url": "https://ja.wikipedia.org/wiki/朝倉未来",
+      "lead": "朝倉未来は、日本の総合格闘家。"
+    }
+  },
+  {
+    "id": "rzn_0002",
+    "name": "朝倉 海",
+    "kana": "あさくら かい",
+    "weightClass": "バンタム級",
+    "affiliation": "トライフォース赤坂",
+    "record": { "wins": 20, "losses": 4, "draws": 0, "noContests": 0 },
+    "wikipedia": {
+      "title": "朝倉海",
+      "lang": "ja",
+      "url": "https://ja.wikipedia.org/wiki/朝倉海",
+      "lead": "朝倉海は、日本の総合格闘家。"
+    }
+  },
+  {
+    "id": "rzn_0003",
+    "name": "堀口 恭司",
+    "kana": "ほりぐち きょうじ",
+    "weightClass": "バンタム級",
+    "affiliation": "アメリカン・トップチーム",
+    "record": { "wins": 31, "losses": 5, "draws": 0, "noContests": 0 },
+    "wikipedia": {
+      "title": "堀口恭司",
+      "lang": "ja",
+      "url": "https://ja.wikipedia.org/wiki/堀口恭司",
+      "lead": "堀口恭司は、日本の総合格闘家。"
+    }
+  }
+]
+

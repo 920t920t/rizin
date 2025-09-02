@@ -1,0 +1,67 @@
+---
+import type { Bout, VoteCounts } from '@lib/types';
+import VoteWidget from './VoteWidget.astro';
+const { bouts, votes } = Astro.props as { bouts: Bout[]; votes: VoteCounts };
+---
+<section aria-labelledby="featured-heading" style="margin-top:16px;">
+  <h2 id="featured-heading">注目マッチアップ</h2>
+  <div class="grid" role="list">
+    {bouts.map((b) => {
+      const key = [b.fighterId, b.opponentId].sort().join('_');
+      const initial = votes[key] ?? 0;
+      return (
+        <div class="card" role="listitem">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+            <div>
+              <div><strong>{b.fighterId}</strong> vs <strong>{b.opponentId}</strong></div>
+              <div class="muted" style="font-size:12px;">{b.event ?? ''} {b.notes ?? ''}</div>
+            </div>
+            <VoteWidget fighterId={b.fighterId} opponentId={b.opponentId} initialCount={initial} />
+          </div>
+        </div>
+      );
+    })}
+  </div>
+
+  <div style="margin-top:12px;">
+    <button id="export-votes" class="btn">ローカル投票をエクスポート</button>
+  </div>
+</section>
+
+<script>
+  function collectVotes() {
+    const votes = {};
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (!k) continue;
+      if (k.startsWith('vote:delta:')) {
+        const key = k.replace('vote:delta:', '');
+        const val = parseInt(localStorage.getItem(k) || '0', 10) || 0;
+        if (val > 0) votes[key] = val;
+      }
+    }
+    return {
+      exportedAt: new Date().toISOString(),
+      cooldownMs: 24 * 60 * 60 * 1000,
+      votes
+    };
+  }
+
+  function downloadJSON(obj, filename) {
+    const blob = new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  document.getElementById('export-votes')?.addEventListener('click', () => {
+    const data = collectVotes();
+    downloadJSON(data, 'local_votes.json');
+  });
+</script>
+

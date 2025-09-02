@@ -1,0 +1,21 @@
+---
+import type { Fighter } from '@lib/types';
+import { safeText } from '@lib/format';
+const { fighter } = Astro.props as { fighter: Fighter };
+---
+<article class="card">
+  <h3 style="margin:0 0 6px 0;"><a href={`${import.meta.env.BASE_URL}fighters/${fighter.id}`}>{safeText(fighter.name)}</a></h3>
+  <div class="muted" style="font-size:14px;">{safeText(fighter.kana)}</div>
+  <div style="margin:8px 0;display:flex;gap:8px;flex-wrap:wrap;">
+    <span class="pill">{safeText(fighter.weightClass)}</span>
+    <span class="pill">{safeText(fighter.affiliation)}</span>
+  </div>
+  <div class="muted" style="font-size:14px;">
+    戦績: {fighter.record?.wins ?? '-'}勝 {fighter.record?.losses ?? '-'}敗 {fighter.record?.draws ?? '-'}分
+  </div>
+  {fighter.wikipedia?.url && (
+    <div style="margin-top:6px;">
+      <a href={fighter.wikipedia.url} target="_blank" rel="noopener noreferrer">Wikipedia</a>
+    </div>
+  )}
+</article>

@@ -1,0 +1,48 @@
+---
+import type { QuizQuestion } from '@lib/types';
+const { question } = Astro.props as { question: QuizQuestion };
+---
+<div class="card" tabindex="0" id={`q-${question.id}`} data-answer={question.answerIndex}>
+  <div style="margin-bottom:8px;"><strong>Q.</strong> {question.text}</div>
+  <div style="display:flex;flex-direction:column;gap:6px;" id={`opts-${question.id}`}>
+    {question.choices.map((c, i) => (
+      <button class="btn" data-index={i}>{c}</button>
+    ))}
+  </div>
+  <div id={`result-${question.id}`} class="muted" style="margin-top:8px;min-height:1.2em;"></div>
+</div>
+
+<script define:vars={{ id: question.id, answerIndex: question.answerIndex }}>
+  const root = document.getElementById(`q-${id}`);
+  const result = document.getElementById(`result-${id}`);
+  const btns = Array.from(document.querySelectorAll(`#opts-${id} .btn`));
+
+  function submit(idx) {
+    const ok = idx === answerIndex;
+    if (result) result.textContent = ok ? '正解！' : '不正解…';
+    btns.forEach((b, i) => {
+      b.toggleAttribute('disabled', true);
+      if (i === answerIndex) b.classList.add('primary');
+    });
+  }
+
+  btns.forEach((b, i) => b.addEventListener('click', () => submit(i)));
+
+  let focusIdx = 0;
+  root?.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+      e.preventDefault();
+      focusIdx = (focusIdx + 1) % btns.length;
+      (btns[focusIdx]).focus();
+    }
+    if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+      e.preventDefault();
+      focusIdx = (focusIdx - 1 + btns.length) % btns.length;
+      (btns[focusIdx]).focus();
+    }
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      (btns[focusIdx]).click();
+    }
+  });
+</script>

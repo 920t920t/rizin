@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import type { Fighter } from '../../lib/types';
+import { loadFighters } from '../../lib/data';
+import { safeText } from '../../lib/format';
+
+export async function getStaticPaths() {
+  const fighters = await loadFighters();
+  return fighters.map((f) => ({ params: { id: f.id }, props: { fighter: f } }));
+}
+
+const { fighter } = Astro.props as { fighter: Fighter };
+---
+<BaseLayout title={`${fighter.name} | RIZIN 選手名鑑`}>
+  <article>
+    <a href={`${import.meta.env.BASE_URL}fighters`} class="muted">← 一覧へ</a>
+    <h1 style="margin-bottom:4px;">{safeText(fighter.name)}</h1>
+    <div class="muted" style="margin-bottom:8px;">{safeText(fighter.kana)}</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+      <span class="pill">{safeText(fighter.weightClass)}</span>
+      <span class="pill">{safeText(fighter.affiliation)}</span>
+    </div>
+
+    {fighter.wikipedia?.lead && (
+      <p>{fighter.wikipedia.lead}</p>
+    )}
+    {fighter.wikipedia?.url && (
+      <p class="muted" style="font-size:12px;">出典: <a href={fighter.wikipedia.url} target="_blank" rel="noopener noreferrer">{fighter.wikipedia.title ?? 'Wikipedia'}</a>（CC BY-SA 4.0）</p>
+    )}
+  </article>
+</BaseLayout>
