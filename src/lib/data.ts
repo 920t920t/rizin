@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import type { Bout, Fighter, VoteCounts } from './types';
+import { normalizeMatchupKey } from './paths';
 
 const root = path.resolve(process.cwd());
 
@@ -20,9 +21,17 @@ export async function loadBouts(): Promise<Bout[]> {
 
 export async function loadVotes(): Promise<VoteCounts> {
   try {
-    return await readJson<VoteCounts>('data/votes.json');
+    const raw = await readJson<Record<string, number>>('data/votes.json');
+    const out: VoteCounts = {};
+    for (const [k, v] of Object.entries(raw || {})) {
+      const parts = k.split('_');
+      if (parts.length !== 2) continue;
+      const nk = normalizeMatchupKey(parts[0], parts[1]);
+      const n = Number.isFinite(v) ? v : 0;
+      out[nk] = (out[nk] ?? 0) + n;
+    }
+    return out;
   } catch {
     return {};
   }
 }
-

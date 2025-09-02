@@ -5,19 +5,20 @@ const { bouts, votes } = Astro.props as { bouts: Bout[]; votes: VoteCounts };
 ---
 <section aria-labelledby="featured-heading" style="margin-top:16px;">
   <h2 id="featured-heading">注目マッチアップ</h2>
-  <div class="grid" role="list">
-    {(bouts
-      .slice()
-      .sort((a, b) => {
-        const ka = [a.fighterId, a.opponentId].sort().join('_');
-        const kb = [b.fighterId, b.opponentId].sort().join('_');
-        return (votes[kb] ?? 0) - (votes[ka] ?? 0);
-      })
-    ).map((b) => {
+  <div style="display:flex;gap:8px;align-items:center;margin:8px 0 12px;">
+    <label class="muted" for="sort-bouts">並び替え:</label>
+    <select id="sort-bouts" class="card" style="padding:8px;">
+      <option value="popular">人気順（投票多→少）</option>
+      <option value="pair">組み合わせ（キー昇順）</option>
+    </select>
+    <span id="bouts-count" class="muted" style="font-size:12px;" aria-live="polite"></span>
+  </div>
+  <div id="bouts-list" class="grid" role="list" aria-label="注目マッチアップ">
+    {(bouts).map((b) => {
       const key = [b.fighterId, b.opponentId].sort().join('_');
       const initial = votes[key] ?? 0;
       return (
-        <div class="card" role="listitem">
+        <div class="card" role="listitem" data-key={key} data-votes={String(initial)}>
           <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
             <div>
               <div><strong>{b.fighterId}</strong> vs <strong>{b.opponentId}</strong></div>
@@ -36,6 +37,31 @@ const { bouts, votes } = Astro.props as { bouts: Bout[]; votes: VoteCounts };
 </section>
 
 <script>
+  // sort toggle
+  const list = document.getElementById('bouts-list');
+  const select = document.getElementById('sort-bouts');
+  const count = document.getElementById('bouts-count');
+  const items = () => Array.from(list?.children || []);
+
+  function applySort() {
+    const mode = (select instanceof HTMLSelectElement) ? select.value : 'popular';
+    const els = items();
+    const frag = document.createDocumentFragment();
+    els.sort((a, b) => {
+      if (mode === 'pair') {
+        return (a.getAttribute('data-key') || '').localeCompare((b.getAttribute('data-key') || ''));
+      }
+      const av = parseInt(a.getAttribute('data-votes') || '0', 10);
+      const bv = parseInt(b.getAttribute('data-votes') || '0', 10);
+      return bv - av; // popular: desc
+    }).forEach(el => frag.appendChild(el));
+    if (list) list.appendChild(frag);
+    if (count) count.textContent = `${els.length}件`;
+  }
+
+  select?.addEventListener('change', applySort);
+  applySort();
+
   function collectVotes() {
     const votes = {};
     for (let i = 0; i < localStorage.length; i++) {
