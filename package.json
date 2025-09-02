@@ -6,11 +6,12 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "check:votes": "node scripts/check-votes.mjs",
+    "fix:votes": "node scripts/check-votes.mjs --write"
   },
   "devDependencies": {
     "astro": "^4.12.2",
     "typescript": "^5.5.4"
   }
 }
-
