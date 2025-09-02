@@ -8,8 +8,7 @@ const fighters = await loadFighters();
 const bouts = await loadBouts();
 const votes = await loadVotes();
 ---
-<BaseLayout title="選手一覧 | RIZIN 選手名鑑">
+<BaseLayout title="選手一覧 | RIZIN 選手名鑑" description="RIZINの選手一覧。検索・並び替え対応。各選手の詳細ページと注目マッチアップのローカル投票を掲載。">
   <FighterList fighters={fighters} />
   <MatchupList bouts={bouts} votes={votes} />
 </BaseLayout>
-

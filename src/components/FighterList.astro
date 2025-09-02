@@ -5,9 +5,18 @@ const { fighters } = Astro.props as { fighters: Fighter[] };
 ---
 <section aria-labelledby="fighters-heading">
   <h2 id="fighters-heading">選手一覧</h2>
-  <div class="grid cards" role="list">
+  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0 12px;">
+    <input id="q" type="search" placeholder="名前・読み・所属で検索" class="card" style="padding:8px;min-width:260px;" aria-label="検索" />
+    <label class="muted" for="sort">並び替え:</label>
+    <select id="sort" class="card" style="padding:8px;">
+      <option value="name">名前 (あ→わ)</option>
+      <option value="weight">階級 (A→Z)</option>
+      <option value="wins">勝ち数 (多→少)</option>
+    </select>
+  </div>
+  <div id="fighters-list" class="grid cards" role="list">
     {fighters.map((f) => (
-      <div role="listitem">
+      <div role="listitem" data-name={f.name} data-kana={f.kana ?? ''} data-weight={f.weightClass ?? ''} data-affiliation={f.affiliation ?? ''} data-wins={String(f.record?.wins ?? 0)}>
         <FighterCard fighter={f} />
       </div>
     ))}
@@ -17,3 +26,52 @@ const { fighters } = Astro.props as { fighters: Fighter[] };
   )}
 </section>
 
+<script>
+  const list = document.getElementById('fighters-list');
+  const q = document.getElementById('q');
+  const sort = document.getElementById('sort');
+
+  const items = () => Array.from(list?.children || []);
+
+  function matches(el, term) {
+    const t = term.trim().toLowerCase();
+    if (!t) return true;
+    const name = (el.getAttribute('data-name') || '').toLowerCase();
+    const kana = (el.getAttribute('data-kana') || '').toLowerCase();
+    const aff = (el.getAttribute('data-affiliation') || '').toLowerCase();
+    const wt = (el.getAttribute('data-weight') || '').toLowerCase();
+    return name.includes(t) || kana.includes(t) || aff.includes(t) || wt.includes(t);
+  }
+
+  function compare(a, b, key) {
+    if (key === 'wins') {
+      const aw = parseInt(a.getAttribute('data-wins') || '0', 10);
+      const bw = parseInt(b.getAttribute('data-wins') || '0', 10);
+      return bw - aw; // desc
+    }
+    if (key === 'weight') {
+      const av = (a.getAttribute('data-weight') || '').toLowerCase();
+      const bv = (b.getAttribute('data-weight') || '').toLowerCase();
+      return av.localeCompare(bv, 'ja');
+    }
+    const an = (a.getAttribute('data-name') || '').toLowerCase();
+    const bn = (b.getAttribute('data-name') || '').toLowerCase();
+    return an.localeCompare(bn, 'ja');
+  }
+
+  function apply() {
+    const term = (q instanceof HTMLInputElement) ? q.value : '';
+    const mode = (sort instanceof HTMLSelectElement) ? sort.value : 'name';
+    const els = items();
+    const frag = document.createDocumentFragment();
+    els
+      .filter((el) => matches(el, term))
+      .sort((a, b) => compare(a, b, mode))
+      .forEach((el) => frag.appendChild(el));
+    if (list) list.appendChild(frag);
+  }
+
+  q?.addEventListener('input', apply);
+  sort?.addEventListener('change', apply);
+  apply();
+</script>

@@ -10,7 +10,7 @@ const matchupKey = normalizeMatchupKey(fighterId, opponentId);
 ---
 <div class="vote" data-key={matchupKey}>
   <button class="btn primary" id={`vote-${matchupKey}`} aria-pressed="false">見たい</button>
-  <span id={`count-${matchupKey}`} class="pill" aria-live="polite">{initialCount}</span>
+  <span id={`count-${matchupKey}`} class="pill" aria-live="polite" data-base={initialCount}>{initialCount}</span>
   <span id={`cool-${matchupKey}`} class="muted" style="margin-left:8px;font-size:12px;"></span>
 </div>
 <script define:vars={{ key: matchupKey, cooldownMs }}>
@@ -55,12 +55,13 @@ const matchupKey = normalizeMatchupKey(fighterId, opponentId);
 
   function syncUI() {
     const localDelta = getDelta();
-    const base = parseInt(countEl.textContent || '0', 10) || 0;
+    const base = parseInt(countEl.getAttribute('data-base') || '0', 10) || 0;
     countEl.textContent = String(base + localDelta);
     const ok = canVote();
     btn.setAttribute('aria-disabled', ok ? 'false' : 'true');
+    btn.setAttribute('aria-pressed', ok ? 'false' : 'true');
     btn.toggleAttribute('disabled', !ok);
-    coolEl.textContent = ok ? '' : `再投票まで ${fmt(remaining())}`;
+    coolEl.textContent = ok ? '' : `次回まで ${fmt(remaining())}`;
   }
 
   let timer;
