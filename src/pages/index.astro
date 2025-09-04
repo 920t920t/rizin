@@ -2,10 +2,21 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 <BaseLayout title="RIZIN 選手名鑑" description="RIZIN選手名鑑（テキスト先行版）。選手一覧・詳細・クイズ、注目マッチアップのローカル投票を備えた静的サイト。">
-  <h1>RIZIN 選手名鑑（テキスト先行MVP）</h1>
-  <p>静的生成（SSG）・ローカル投票付きの最小実装です。</p>
-  <ul>
-    <li><a href={`${import.meta.env.BASE_URL}fighters`}>選手一覧へ</a></li>
-    <li><a href={`${import.meta.env.BASE_URL}quiz`}>クイズへ</a></li>
-  </ul>
+  <section class="hero">
+    <h1>テキスト先行の、速いRIZIN選手名鑑。</h1>
+    <p>画像なしでも軽快に。選手一覧・詳細・クイズ、注目カードの『見たい』投票も。</p>
+    <div class="cta">
+      <a class="btn primary" href={`${import.meta.env.BASE_URL}fighters`}>選手一覧</a>
+      <a class="btn" href={`${import.meta.env.BASE_URL}predict`}>勝利予想</a>
+      <a class="btn" href={`${import.meta.env.BASE_URL}quiz`}>クイズ</a>
+    </div>
+  </section>
+  <section>
+    <h2>できること</h2>
+    <ul>
+      <li>選手を検索・絞り込み・並び替え</li>
+      <li>注目マッチアップに『見たい』投票（24hクールダウン）</li>
+      <li>クイズ（5問）で理解度チェック</li>
+    </ul>
+  </section>
 </BaseLayout>
