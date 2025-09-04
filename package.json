@@ -11,7 +11,11 @@
     "fix:votes": "node scripts/check-votes.mjs --write",
     "fix:votes:out": "node scripts/check-votes.mjs --out data/votes.normalized.json",
     "check:fighters": "node scripts/check-fighters.mjs",
-    "check:bouts": "node scripts/check-bouts.mjs"
+    "check:bouts": "node scripts/check-bouts.mjs",
+    "data:wp": "node scripts/fetch-wikipedia.mjs",
+    "data:wd": "node scripts/fetch-wikidata.mjs",
+    "data:update": "node scripts/update-data.mjs",
+    "data:refresh": "npm run data:wp && npm run data:wd && npm run data:update"
   },
   "devDependencies": {
     "astro": "^4.12.2",
