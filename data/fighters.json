@@ -5,12 +5,17 @@
     "kana": "あさくら みくる",
     "weightClass": "フェザー級",
     "affiliation": "トライフォース赤坂",
-    "record": { "wins": 16, "losses": 4, "draws": 0, "noContests": 0 },
+    "record": {
+      "wins": 16,
+      "losses": 4,
+      "draws": 0,
+      "noContests": 0
+    },
     "wikipedia": {
       "title": "朝倉未来",
       "lang": "ja",
-      "url": "https://ja.wikipedia.org/wiki/朝倉未来",
-      "lead": "朝倉未来は、日本の総合格闘家。"
+      "url": "https://ja.wikipedia.org/wiki/%E6%9C%9D%E5%80%89%E6%9C%AA%E6%9D%A5",
+      "lead": "朝倉 未来 は、日本の男性プロ総合格闘家、YouTuber、実業家。愛知県豊橋市出身。JAPAN TOP TEAM所属。現RIZINフェザー級ランキング1位。元THE OUTSIDER二階級制覇王者。BreakingDown代表取締役（CEO）。弟はプロ総合格闘家の朝倉海。"
     }
   },
   {
@@ -19,12 +24,17 @@
     "kana": "あさくら かい",
     "weightClass": "バンタム級",
     "affiliation": "トライフォース赤坂",
-    "record": { "wins": 20, "losses": 4, "draws": 0, "noContests": 0 },
+    "record": {
+      "wins": 20,
+      "losses": 4,
+      "draws": 0,
+      "noContests": 0
+    },
     "wikipedia": {
       "title": "朝倉海",
       "lang": "ja",
-      "url": "https://ja.wikipedia.org/wiki/朝倉海",
-      "lead": "朝倉海は、日本の総合格闘家。"
+      "url": "https://ja.wikipedia.org/wiki/%E6%9C%9D%E5%80%89%E6%B5%B7",
+      "lead": "朝倉 海 は、日本の総合格闘家。愛知県豊橋市出身。JAPAN TOP TEAM所属。第3代・第6代RIZINバンタム級王者。2024年よりUFCに出場。兄は総合格闘家の朝倉未来。"
     }
   },
   {
@@ -33,13 +43,17 @@
     "kana": "ほりぐち きょうじ",
     "weightClass": "バンタム級",
     "affiliation": "アメリカン・トップチーム",
-    "record": { "wins": 31, "losses": 5, "draws": 0, "noContests": 0 },
+    "record": {
+      "wins": 31,
+      "losses": 5,
+      "draws": 0,
+      "noContests": 0
+    },
     "wikipedia": {
       "title": "堀口恭司",
       "lang": "ja",
-      "url": "https://ja.wikipedia.org/wiki/堀口恭司",
-      "lead": "堀口恭司は、日本の総合格闘家。"
+      "url": "https://ja.wikipedia.org/wiki/%E5%A0%80%E5%8F%A3%E6%81%AD%E5%8F%B8",
+      "lead": "堀口 恭司 は、日本の男性総合格闘家、空手家。群馬県高崎市出身。アメリカン・トップチーム所属。元修斗世界バンタム級王者。初代RIZINフライ級王者。初代・第4代RIZINバンタム級王者。第7代Bellator世界バンタム級王者。RIZIN WORLD GRAND-PRIX 2017 バンタム級トーナメント優勝。RIZIN史上初の2階級制覇王者。"
     }
   }
 ]
-
