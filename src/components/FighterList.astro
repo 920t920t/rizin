@@ -14,6 +14,14 @@ const { fighters } = Astro.props as { fighters: Fighter[] };
       <option value="weight">階級 (A→Z)</option>
       <option value="wins">勝ち数 (多→少)</option>
     </select>
+    <label class="muted" for="f-weight">階級:</label>
+    <select id="f-weight" class="card" style="padding:8px;">
+      <option value="">すべて</option>
+    </select>
+    <label class="muted" for="f-aff">所属:</label>
+    <select id="f-aff" class="card" style="padding:8px;">
+      <option value="">すべて</option>
+    </select>
   </div>
   <div id="results-count" class="muted" style="margin: -6px 0 8px 0; font-size: 12px;" aria-live="polite"></div>
   <div id="fighters-list" class="grid cards" role="list" aria-label="検索結果">
@@ -33,6 +41,8 @@ const { fighters } = Astro.props as { fighters: Fighter[] };
   const q = document.getElementById('q');
   const sort = document.getElementById('sort');
   const count = document.getElementById('results-count');
+  const fWeight = document.getElementById('f-weight');
+  const fAff = document.getElementById('f-aff');
 
   const items = () => Array.from(list?.children || []);
 
@@ -44,6 +54,16 @@ const { fighters } = Astro.props as { fighters: Fighter[] };
     const aff = (el.getAttribute('data-affiliation') || '').toLowerCase();
     const wt = (el.getAttribute('data-weight') || '').toLowerCase();
     return name.includes(t) || kana.includes(t) || aff.includes(t) || wt.includes(t);
+  }
+
+  function matchesFacet(el) {
+    const w = (fWeight instanceof HTMLSelectElement) ? fWeight.value : '';
+    const a = (fAff instanceof HTMLSelectElement) ? fAff.value : '';
+    const wt = (el.getAttribute('data-weight') || '');
+    const aff = (el.getAttribute('data-affiliation') || '');
+    const okW = !w || wt === w;
+    const okA = !a || aff === a;
+    return okW && okA;
   }
 
   function compare(a, b, key) {
@@ -68,6 +88,7 @@ const { fighters } = Astro.props as { fighters: Fighter[] };
     const els = items();
     const frag = document.createDocumentFragment();
     const filtered = els
+      .filter((el) => matchesFacet(el))
       .filter((el) => matches(el, term))
       .sort((a, b) => compare(a, b, mode));
     filtered.forEach((el) => frag.appendChild(el));
@@ -77,21 +98,79 @@ const { fighters } = Astro.props as { fighters: Fighter[] };
     const url = new URL(location.href);
     if (term) url.searchParams.set('q', term); else url.searchParams.delete('q');
     if (mode && mode !== 'name') url.searchParams.set('sort', mode); else url.searchParams.delete('sort');
+    const w = (fWeight instanceof HTMLSelectElement) ? fWeight.value : '';
+    const a = (fAff instanceof HTMLSelectElement) ? fAff.value : '';
+    if (w) url.searchParams.set('w', w); else url.searchParams.delete('w');
+    if (a) url.searchParams.set('a', a); else url.searchParams.delete('a');
     history.replaceState(null, '', url);
+
+    highlight(term);
+  }
+
+  function highlight(term) {
+    // remove old marks
+    list?.querySelectorAll('mark').forEach(m => {
+      const t=document.createTextNode(m.textContent||'');
+      m.replaceWith(t);
+    });
+    const t = term.trim();
+    if (!t) return;
+    const re = new RegExp(t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+    items().forEach(el => {
+      el.querySelectorAll('.card, .pill, h3, .muted').forEach(node => {
+        node.childNodes.forEach(child => {
+          if (child.nodeType === Node.TEXT_NODE) {
+            const text = child.textContent || '';
+            if (!re.test(text)) return;
+            const span = document.createElement('span');
+            let lastIndex = 0; re.lastIndex = 0;
+            for (const match of text.matchAll(re)) {
+              span.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+              const mark = document.createElement('mark');
+              mark.textContent = match[0];
+              span.appendChild(mark);
+              lastIndex = match.index + match[0].length;
+            }
+            span.appendChild(document.createTextNode(text.slice(lastIndex)));
+            child.replaceWith(span);
+          }
+        });
+      });
+    });
   }
 
   // initialize from URL
   const url = new URL(location.href);
   const qParam = url.searchParams.get('q') || '';
   const sParam = url.searchParams.get('sort') || localStorage.getItem('fighters:sort') || 'name';
+  const wParam = url.searchParams.get('w') || '';
+  const aParam = url.searchParams.get('a') || '';
   if (q instanceof HTMLInputElement) q.value = qParam;
   if (sort instanceof HTMLSelectElement) sort.value = sParam;
+  if (fWeight instanceof HTMLSelectElement) fWeight.value = wParam;
+  if (fAff instanceof HTMLSelectElement) fAff.value = aParam;
+
+  // populate facets
+  const wSet = new Set(items().map(el => el.getAttribute('data-weight')).filter(Boolean));
+  const aSet = new Set(items().map(el => el.getAttribute('data-affiliation')).filter(Boolean));
+  if (fWeight instanceof HTMLSelectElement && fWeight.children.length === 1) {
+    Array.from(wSet).sort((a,b)=>String(a).localeCompare(String(b),'ja')).forEach(v => {
+      const o=document.createElement('option'); o.value=String(v); o.textContent=String(v); fWeight.appendChild(o);
+    });
+  }
+  if (fAff instanceof HTMLSelectElement && fAff.children.length === 1) {
+    Array.from(aSet).sort((a,b)=>String(a).localeCompare(String(b),'ja')).forEach(v => {
+      const o=document.createElement('option'); o.value=String(v); o.textContent=String(v); fAff.appendChild(o);
+    });
+  }
 
   q?.addEventListener('input', apply);
   sort?.addEventListener('change', () => { 
     if (sort instanceof HTMLSelectElement) localStorage.setItem('fighters:sort', sort.value);
     apply();
   });
+  fWeight?.addEventListener('change', apply);
+  fAff?.addEventListener('change', apply);
   apply();
 
   // Shortcut: / で検索にフォーカス（フォーム内入力時は無効）

@@ -30,6 +30,10 @@ jobs:
       - run: npm ci
       - name: Check votes (non-blocking)
         run: npm run check:votes || true
+      - name: Check fighters (non-blocking)
+        run: npm run check:fighters || true
+      - name: Check bouts (non-blocking)
+        run: npm run check:bouts || true
       - run: npm run build
         env:
           ASTRO_TELEMETRY_DISABLED: 1

@@ -9,7 +9,9 @@
     "preview": "astro preview",
     "check:votes": "node scripts/check-votes.mjs",
     "fix:votes": "node scripts/check-votes.mjs --write",
-    "fix:votes:out": "node scripts/check-votes.mjs --out data/votes.normalized.json"
+    "fix:votes:out": "node scripts/check-votes.mjs --out data/votes.normalized.json",
+    "check:fighters": "node scripts/check-fighters.mjs",
+    "check:bouts": "node scripts/check-bouts.mjs"
   },
   "devDependencies": {
     "astro": "^4.12.2",

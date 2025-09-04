@@ -43,6 +43,16 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).toString(
         で再利用しています。
       </small>
     </footer>
+    <script>
+      // ナビの現在位置ハイライト
+      const here = location.pathname;
+      document.querySelectorAll('header nav a').forEach(a => {
+        const href = a.getAttribute('href') || '';
+        if (href && (here === href || here === href + '/' || here.startsWith(href + '/'))) {
+          a.setAttribute('aria-current', 'page');
+        }
+      });
+    </script>
   </body>
   
 </html>
