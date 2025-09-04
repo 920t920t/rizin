@@ -6,10 +6,10 @@
     "weightClass": "フェザー級",
     "affiliation": "トライフォース赤坂",
     "record": {
-      "wins": 2,
-      "losses": 0,
-      "draws": 12,
-      "noContests": 0
+      "wins": 19,
+      "losses": 5,
+      "draws": 0,
+      "noContests": 1
     },
     "wikipedia": {
       "title": "朝倉未来",
@@ -25,9 +25,9 @@
     "weightClass": "バンタム級",
     "affiliation": "トライフォース赤坂",
     "record": {
-      "wins": 4,
-      "losses": 2,
-      "draws": 6,
+      "wins": 21,
+      "losses": 6,
+      "draws": 0,
       "noContests": 0
     },
     "wikipedia": {
@@ -44,10 +44,10 @@
     "weightClass": "バンタム級",
     "affiliation": "アメリカン・トップチーム",
     "record": {
-      "wins": 3,
-      "losses": 0,
-      "draws": 17,
-      "noContests": 0
+      "wins": 34,
+      "losses": 5,
+      "draws": 0,
+      "noContests": 1
     },
     "wikipedia": {
       "title": "堀口恭司",
@@ -82,9 +82,9 @@
     "weightClass": null,
     "affiliation": null,
     "record": {
-      "wins": 1,
-      "losses": 0,
-      "draws": 11,
+      "wins": 34,
+      "losses": 9,
+      "draws": 1,
       "noContests": 1
     },
     "wikipedia": {
@@ -101,9 +101,9 @@
     "weightClass": null,
     "affiliation": null,
     "record": {
-      "wins": 3,
-      "losses": 0,
-      "draws": 8,
+      "wins": 19,
+      "losses": 3,
+      "draws": 0,
       "noContests": 0
     },
     "wikipedia": {
@@ -120,10 +120,10 @@
     "weightClass": null,
     "affiliation": null,
     "record": {
-      "wins": 1,
-      "losses": 0,
-      "draws": 3,
-      "noContests": 0
+      "wins": 13,
+      "losses": 6,
+      "draws": 0,
+      "noContests": 1
     },
     "wikipedia": {
       "title": "鈴木千裕",
@@ -139,9 +139,9 @@
     "weightClass": null,
     "affiliation": null,
     "record": {
-      "wins": 2,
-      "losses": 0,
-      "draws": 2,
+      "wins": 4,
+      "losses": 3,
+      "draws": 0,
       "noContests": 0
     },
     "wikipedia": {
@@ -158,9 +158,9 @@
     "weightClass": null,
     "affiliation": null,
     "record": {
-      "wins": 0,
-      "losses": 0,
-      "draws": 29,
+      "wins": 28,
+      "losses": 8,
+      "draws": 2,
       "noContests": 0
     },
     "wikipedia": {

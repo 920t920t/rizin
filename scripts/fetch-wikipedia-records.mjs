@@ -15,31 +15,43 @@ async function fetchHtml(lang, title) {
 }
 
 function countRecords(html) {
-  let wins = 0, losses = 0, draws = 0, ncs = 0;
-  const tables = html.split(/<table[^>]*>/i).slice(1).map(t => '<table>' + t);
-  const isMmaTable = (tbl) => /総合|格闘技|MMA|戦績/.test(tbl) && /<tr/i.test(tbl);
-  const rowsFrom = (tbl) => tbl.split(/<tr[^>]*>/i).slice(1).map(r => '<tr>' + r);
-  const getText = (s) => s
+  // Prefer the summary table that explicitly lists "総合格闘技 戦績" with bold totals for 勝/敗
+  // Fallback to row counting is omitted to avoid overcount; we only return values when confident.
+  const tables = html.split(/<table[^>]*?>/i).slice(1).map(t => '<table>' + t);
+  const isMmaSummary = (tbl) => /総合\s*格闘技\s*戦績|戦績/.test(tbl) && /<th[^>]*colspan/i.test(tbl);
+  const clean = (s) => s
     .replace(/<script[\s\S]*?<\/script>/gi,'')
     .replace(/<style[\s\S]*?<\/style>/gi,'')
     .replace(/<[^>]+>/g,' ')
-    .replace(/&nbsp;|&amp;|&lt;|&gt;|&quot;|&#\d+;?/g,' ')
+    .replace(/\s+/g,' ')
     .trim();
-
-  const targetTables = tables.filter(isMmaTable);
-  const scanTables = targetTables.length ? targetTables : tables;
-
-  for (const tbl of scanTables) {
-    for (const row of rowsFrom(tbl)) {
-      const text = getText(row);
-      if (/対戦相手|Result|Opponent|戦績|試合|通算/i.test(text)) continue;
-      if (/勝利|勝ち|\b勝\b/.test(text)) wins++;
-      else if (/敗北|敗け|\b敗\b/.test(text)) losses++;
-      else if (/引き分け|ドロー|\b分\b/.test(text)) draws++;
-      else if (/無効試合|ノーコンテスト|\bNC\b/.test(text)) ncs++;
+  for (const tbl of tables) {
+    if (!isMmaSummary(tbl)) continue;
+    const bWins = /<td[^>]*>\s*<b>(\d+)<\/b>\s*[^<]*?勝/.exec(tbl);
+    const bLoss = /<td[^>]*>\s*<b>(\d+)<\/b>\s*[^<]*?敗/.exec(tbl);
+    // Extract draws and NC as the last two numeric cells in the first data row (wins row)
+    // Find wins row: it should contain "勝" and have multiple <td>
+    const rows = tbl.split(/<tr[^>]*?>/i).slice(1).map(r => '<tr>' + r);
+    let draws = null, ncs = null;
+    for (const r of rows) {
+      if (!/勝/.test(r)) continue;
+      const nums = Array.from(r.matchAll(/>(\d+)</g)).map(m => parseInt(m[1],10));
+      if (nums.length >= 3) {
+        draws = nums[nums.length - 2];
+        ncs = nums[nums.length - 1];
+        break;
+      }
+    }
+    if (bWins && bLoss) {
+      return {
+        wins: parseInt(bWins[1], 10),
+        losses: parseInt(bLoss[1], 10),
+        draws: draws ?? 0,
+        ncs: ncs ?? 0
+      };
     }
   }
-  return { wins, losses, draws, ncs };
+  return { wins: 0, losses: 0, draws: 0, ncs: 0 };
 }
 
 async function main(){
@@ -66,4 +78,3 @@ async function main(){
 }
 
 main().catch((e)=>{ console.error('[records] ERROR', e); process.exit(1); });
-
