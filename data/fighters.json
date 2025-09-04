@@ -6,9 +6,9 @@
     "weightClass": "フェザー級",
     "affiliation": "トライフォース赤坂",
     "record": {
-      "wins": 19,
-      "losses": 4,
-      "draws": 0,
+      "wins": 2,
+      "losses": 0,
+      "draws": 12,
       "noContests": 0
     },
     "wikipedia": {
@@ -25,9 +25,9 @@
     "weightClass": "バンタム級",
     "affiliation": "トライフォース赤坂",
     "record": {
-      "wins": 20,
-      "losses": 4,
-      "draws": 0,
+      "wins": 4,
+      "losses": 2,
+      "draws": 6,
       "noContests": 0
     },
     "wikipedia": {
@@ -44,9 +44,9 @@
     "weightClass": "バンタム級",
     "affiliation": "アメリカン・トップチーム",
     "record": {
-      "wins": 31,
-      "losses": 5,
-      "draws": 0,
+      "wins": 3,
+      "losses": 0,
+      "draws": 17,
       "noContests": 0
     },
     "wikipedia": {
@@ -82,10 +82,10 @@
     "weightClass": null,
     "affiliation": null,
     "record": {
-      "wins": null,
-      "losses": null,
-      "draws": null,
-      "noContests": null
+      "wins": 1,
+      "losses": 0,
+      "draws": 11,
+      "noContests": 1
     },
     "wikipedia": {
       "title": "クレベル・コイケ",
@@ -101,10 +101,10 @@
     "weightClass": null,
     "affiliation": null,
     "record": {
-      "wins": null,
-      "losses": null,
-      "draws": null,
-      "noContests": null
+      "wins": 3,
+      "losses": 0,
+      "draws": 8,
+      "noContests": 0
     },
     "wikipedia": {
       "title": "ホベルト・サトシ・ソウザ",
@@ -120,10 +120,10 @@
     "weightClass": null,
     "affiliation": null,
     "record": {
-      "wins": null,
-      "losses": null,
-      "draws": null,
-      "noContests": null
+      "wins": 1,
+      "losses": 0,
+      "draws": 3,
+      "noContests": 0
     },
     "wikipedia": {
       "title": "鈴木千裕",
@@ -139,10 +139,10 @@
     "weightClass": null,
     "affiliation": null,
     "record": {
-      "wins": null,
-      "losses": null,
-      "draws": null,
-      "noContests": null
+      "wins": 2,
+      "losses": 0,
+      "draws": 2,
+      "noContests": 0
     },
     "wikipedia": {
       "title": "平本蓮",
@@ -158,10 +158,10 @@
     "weightClass": null,
     "affiliation": null,
     "record": {
-      "wins": null,
-      "losses": null,
-      "draws": null,
-      "noContests": null
+      "wins": 0,
+      "losses": 0,
+      "draws": 29,
+      "noContests": 0
     },
     "wikipedia": {
       "title": "扇久保博正",

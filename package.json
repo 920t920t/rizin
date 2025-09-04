@@ -15,10 +15,8 @@
     "data:wp": "node scripts/fetch-wikipedia.mjs",
     "data:wd": "node scripts/fetch-wikidata.mjs",
     "data:update": "node scripts/update-data.mjs",
-    "data:add": "node scripts/add-from-sources.mjs",
-    "data:override": "node scripts/apply-overrides.mjs",
-    "data:refresh": "npm run data:wp && npm run data:update && npm run data:override",
-    "data:refresh:all": "npm run data:add && npm run data:wp && npm run data:update && npm run data:override"
+    "data:records": "node scripts/fetch-wikipedia-records.mjs",
+    "data:refresh": "npm run data:wp && npm run data:update && npm run data:records"
   },
   "devDependencies": {
     "astro": "^4.12.2",
