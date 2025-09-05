@@ -169,5 +169,225 @@
       "url": "https://ja.wikipedia.org/wiki/%E6%89%87%E4%B9%85%E4%BF%9D%E5%8D%9A%E6%AD%A3",
       "lead": "扇久保 博正 は、日本の男性プロ総合格闘家、YouTuber。 岩手県久慈市出身。THE BLACKBELT JAPAN所属。第6代修斗世界フライ級王者。第8代修斗世界バンタム級王者。修斗世界2階級制覇。TUF 24フライ級準優勝。RIZIN バンタム級 JAPAN GRAND-PRIX 2021優勝。"
     }
+  },
+  {
+    "id": "rzn_0010",
+    "name": "井上直樹 (格闘家)",
+    "kana": null,
+    "enName": null,
+    "birthDate": null,
+    "weightClass": null,
+    "affiliation": null,
+    "profile": null,
+    "record": {
+      "wins": 20,
+      "losses": 4,
+      "draws": 0,
+      "noContests": 0
+    },
+    "wikipedia": {
+      "title": "井上直樹 (格闘家)",
+      "lang": "ja",
+      "url": "https://ja.wikipedia.org/wiki/%E4%BA%95%E4%B8%8A%E7%9B%B4%E6%A8%B9_(%E6%A0%BC%E9%97%98%E5%AE%B6)",
+      "lead": "井上 直樹 は、日本の男性総合格闘家。愛知県豊橋市出身。キルクリフFC所属。現RIZINバンタム級王者。UFC日本人史上最年少出場。"
+    }
+  },
+  {
+    "id": "rzn_0011",
+    "name": "矢地祐介",
+    "kana": null,
+    "enName": null,
+    "birthDate": null,
+    "weightClass": null,
+    "affiliation": null,
+    "profile": null,
+    "record": {
+      "wins": 27,
+      "losses": 15,
+      "draws": 0,
+      "noContests": 0
+    },
+    "wikipedia": {
+      "title": "矢地祐介",
+      "lang": "ja",
+      "url": "https://ja.wikipedia.org/wiki/%E7%9F%A2%E5%9C%B0%E7%A5%90%E4%BB%8B",
+      "lead": "矢地 祐介 は、日本の男性総合格闘家。東京都文京区出身。専修大学法学部卒業。フリー。元修斗環太平洋フェザー級王者。元PXCフェザー級王者。"
+    }
+  },
+  {
+    "id": "rzn_0012",
+    "name": "武田光司",
+    "kana": null,
+    "enName": null,
+    "birthDate": null,
+    "weightClass": null,
+    "affiliation": null,
+    "profile": null,
+    "record": {
+      "wins": 17,
+      "losses": 8,
+      "draws": 0,
+      "noContests": 0
+    },
+    "wikipedia": {
+      "title": "武田光司",
+      "lang": "ja",
+      "url": "https://ja.wikipedia.org/wiki/%E6%AD%A6%E7%94%B0%E5%85%89%E5%8F%B8",
+      "lead": "武田 光司 は、日本の男性プロ総合格闘家、元レスリング選手。埼玉県草加市出身。TRIBE TOKYO MMA所属。元DEEPライト級王者。"
+    }
+  },
+  {
+    "id": "rzn_0013",
+    "name": "萩原京平",
+    "kana": null,
+    "enName": null,
+    "birthDate": null,
+    "weightClass": null,
+    "affiliation": null,
+    "profile": null,
+    "record": {
+      "wins": 9,
+      "losses": 10,
+      "draws": 0,
+      "noContests": 0
+    },
+    "wikipedia": {
+      "title": "萩原京平",
+      "lang": "ja",
+      "url": "https://ja.wikipedia.org/wiki/%E8%90%A9%E5%8E%9F%E4%BA%AC%E5%B9%B3",
+      "lead": "萩原 京平 は、日本の男性総合格闘家。大阪府豊中市出身。SMOKER GYM所属。"
+    }
+  },
+  {
+    "id": "rzn_0014",
+    "name": "浅倉カンナ",
+    "kana": null,
+    "enName": null,
+    "birthDate": null,
+    "weightClass": null,
+    "affiliation": null,
+    "profile": null,
+    "record": {
+      "wins": 20,
+      "losses": 8,
+      "draws": 0,
+      "noContests": 0
+    },
+    "wikipedia": {
+      "title": "浅倉カンナ",
+      "lang": "ja",
+      "url": "https://ja.wikipedia.org/wiki/%E6%B5%85%E5%80%89%E3%82%AB%E3%83%B3%E3%83%8A",
+      "lead": "浅倉 カンナ は、日本の女性元総合格闘家。千葉県柏市出身、THE BLACKBELT JAPAN所属。RIZIN WGP 女子スーパーアトム級トーナメント 2017優勝。"
+    }
+  },
+  {
+    "id": "rzn_0015",
+    "name": "浜崎朱加",
+    "kana": null,
+    "enName": null,
+    "birthDate": null,
+    "weightClass": null,
+    "affiliation": null,
+    "profile": null,
+    "record": {
+      "wins": 25,
+      "losses": 7,
+      "draws": 0,
+      "noContests": 0
+    },
+    "wikipedia": {
+      "title": "浜崎朱加",
+      "lang": "ja",
+      "url": "https://ja.wikipedia.org/wiki/%E6%B5%9C%E5%B4%8E%E6%9C%B1%E5%8A%A0",
+      "lead": "浜崎 朱加 は、日本の女性総合格闘家。山口県山陽小野田市出身。AACC所属。初代・第3代RIZIN女子スーパーアトム級王者。第4代Invicta FC世界アトム級王者。初代DEEP JEWELSストロー級王者。"
+    }
+  },
+  {
+    "id": "rzn_0016",
+    "name": "才賀紀左衛門",
+    "kana": null,
+    "enName": null,
+    "birthDate": null,
+    "weightClass": null,
+    "affiliation": null,
+    "profile": null,
+    "record": {
+      "wins": 21,
+      "losses": 9,
+      "draws": 2,
+      "noContests": 0
+    },
+    "wikipedia": {
+      "title": "才賀紀左衛門",
+      "lang": "ja",
+      "url": "https://ja.wikipedia.org/wiki/%E6%89%8D%E8%B3%80%E7%B4%80%E5%B7%A6%E8%A1%9B%E9%96%80",
+      "lead": "才賀 紀左衛門 は、日本のキックボクサー。大阪府堺市出身。サイガジム主宰。"
+    }
+  },
+  {
+    "id": "rzn_0017",
+    "name": "上迫博仁",
+    "kana": null,
+    "enName": null,
+    "birthDate": null,
+    "weightClass": null,
+    "affiliation": null,
+    "profile": null,
+    "record": {
+      "wins": 17,
+      "losses": 12,
+      "draws": 0,
+      "noContests": 0
+    },
+    "wikipedia": {
+      "title": "上迫博仁",
+      "lang": "ja",
+      "url": "https://ja.wikipedia.org/wiki/%E4%B8%8A%E8%BF%AB%E5%8D%9A%E4%BB%81",
+      "lead": "上迫 博仁 は、日本の男性総合格闘家、スポーツインストラクター。静岡県沼津市出身。NICE BAD GYM主宰。第7代DEEPフェザー級王者。"
+    }
+  },
+  {
+    "id": "rzn_0018",
+    "name": "牛久絢太郎",
+    "kana": null,
+    "enName": null,
+    "birthDate": null,
+    "weightClass": null,
+    "affiliation": null,
+    "profile": null,
+    "record": {
+      "wins": 21,
+      "losses": 11,
+      "draws": 0,
+      "noContests": 0
+    },
+    "wikipedia": {
+      "title": "牛久絢太郎",
+      "lang": "ja",
+      "url": "https://ja.wikipedia.org/wiki/%E7%89%9B%E4%B9%85%E7%B5%A2%E5%A4%AA%E9%83%8E",
+      "lead": "牛久 絢太郎 は、日本の男性プロ総合格闘家、YouTuber。東京都足立区出身。アメリカン・トップチーム所属。第2代RIZINフェザー級王者。第10代DEEPフェザー級王者。"
+    }
+  },
+  {
+    "id": "rzn_0019",
+    "name": "太田忍",
+    "kana": null,
+    "enName": null,
+    "birthDate": null,
+    "weightClass": null,
+    "affiliation": null,
+    "profile": null,
+    "record": {
+      "wins": 7,
+      "losses": 5,
+      "draws": 0,
+      "noContests": 0
+    },
+    "wikipedia": {
+      "title": "太田忍",
+      "lang": "ja",
+      "url": "https://ja.wikipedia.org/wiki/%E5%A4%AA%E7%94%B0%E5%BF%8D",
+      "lead": "太田 忍 は、日本の総合格闘家、元レスリング選手。青森県三戸郡五戸町出身。日本体育大学体育学部体育学科卒業。THE BLACKBELT JAPAN所属。2016年リオデジャネイロオリンピック 銀メダリスト。2019年世界選手権 金メダリスト。"
+    }
   }
 ]

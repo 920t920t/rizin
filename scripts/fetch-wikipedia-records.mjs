@@ -51,6 +51,32 @@ function countRecords(html) {
       };
     }
   }
+  // Fallback: key/value record table like "総合格闘技 記録"
+  const keyValTables = tables.filter((t) => /記録|勝利|敗戦|引き分け|無効試合/.test(t));
+  for (const tbl of keyValTables) {
+    const rows = tbl.split(/<tr[^>]*?>/i).slice(1).map((r) => '<tr>' + r);
+    const getKV = (label) => {
+      for (const r of rows) {
+        if (new RegExp(label).test(r)) {
+          const m = r.match(/<td[^>]*>(\d+)/i);
+          if (m) return parseInt(m[1], 10);
+        }
+      }
+      return null;
+    };
+    const wins = getKV('勝利');
+    const losses = getKV('敗戦|敗');
+    const draws = getKV('引き分け|ドロー');
+    const ncs = getKV('無効試合');
+    if (wins != null || losses != null || draws != null || ncs != null) {
+      return {
+        wins: wins ?? 0,
+        losses: losses ?? 0,
+        draws: draws ?? 0,
+        ncs: ncs ?? 0,
+      };
+    }
+  }
   return { wins: 0, losses: 0, draws: 0, ncs: 0 };
 }
 

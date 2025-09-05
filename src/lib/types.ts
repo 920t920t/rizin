@@ -6,6 +6,18 @@ export interface Fighter {
   birthDate?: string | null;
   weightClass?: string | null;
   affiliation?: string | null;
+  profile?: {
+    nickname?: string[] | null;
+    heightCm?: number | null;
+    weightKg?: number | null;
+    reachCm?: number | null;
+    stance?: string | null;
+    style?: string[] | null;
+    team?: string | null;
+    nationality?: string[] | null;
+    birthplace?: string | null;
+    residence?: string | null;
+  } | null;
   record?: {
     wins?: number | null;
     losses?: number | null;
@@ -44,4 +56,3 @@ export interface QuizQuestion {
   answerIndex: number;
   meta?: Record<string, string>;
 }
-

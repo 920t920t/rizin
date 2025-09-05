@@ -28,5 +28,40 @@ const desc = (fighter.wikipedia?.lead && String(fighter.wikipedia.lead).slice(0,
     {fighter.wikipedia?.url && (
       <p class="muted" style="font-size:12px;">出典: <a href={fighter.wikipedia.url} target="_blank" rel="noopener noreferrer">{fighter.wikipedia.title ?? 'Wikipedia'}</a>（CC BY-SA 4.0）</p>
     )}
+    <section style="margin-top:16px;">
+      <h2>プロフィール</h2>
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;">
+        {fighter.profile?.nickname && fighter.profile.nickname.length > 0 && (
+          <div class="card"><strong>通称</strong><div>{fighter.profile.nickname.join(' / ')}</div></div>
+        )}
+        {fighter.profile?.heightCm && (
+          <div class="card"><strong>身長</strong><div>{fighter.profile.heightCm} cm</div></div>
+        )}
+        {fighter.profile?.weightKg && (
+          <div class="card"><strong>体重</strong><div>{fighter.profile.weightKg} kg</div></div>
+        )}
+        {fighter.profile?.reachCm && (
+          <div class="card"><strong>リーチ</strong><div>{fighter.profile.reachCm} cm</div></div>
+        )}
+        {fighter.profile?.stance && (
+          <div class="card"><strong>スタンス</strong><div>{fighter.profile.stance}</div></div>
+        )}
+        {fighter.profile?.style && fighter.profile.style.length > 0 && (
+          <div class="card"><strong>スタイル</strong><div>{fighter.profile.style.join(' / ')}</div></div>
+        )}
+        {fighter.profile?.team && (
+          <div class="card"><strong>チーム</strong><div>{fighter.profile.team}</div></div>
+        )}
+        {fighter.profile?.nationality && fighter.profile.nationality.length > 0 && (
+          <div class="card"><strong>国籍</strong><div>{fighter.profile.nationality.join(' / ')}</div></div>
+        )}
+        {fighter.profile?.birthplace && (
+          <div class="card"><strong>出身地</strong><div>{fighter.profile.birthplace}</div></div>
+        )}
+        {fighter.profile?.residence && (
+          <div class="card"><strong>居住</strong><div>{fighter.profile.residence}</div></div>
+        )}
+      </div>
+    </section>
   </article>
 </BaseLayout>
