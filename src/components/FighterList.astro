@@ -1,6 +1,7 @@
 ---
 import type { Fighter } from '@lib/types';
 import FighterCard from './FighterCard.astro';
+import { primaryNationality } from '@lib/format';
 const { fighters } = Astro.props as { fighters: Fighter[] };
 ---
 <section aria-labelledby="fighters-heading">
