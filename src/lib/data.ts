@@ -27,9 +27,11 @@ export async function loadVotes(): Promise<VoteCounts> {
     let nonNumberValues = 0;
     let mergedKeys = 0;
     for (const [k, v] of Object.entries(raw || {})) {
-      const parts = k.split('_');
-      if (parts.length !== 2) { invalidKeys++; continue; }
-      const nk = normalizeMatchupKey(parts[0], parts[1]);
+      const idx = k.lastIndexOf('_');
+      if (idx <= 0 || idx === k.length - 1) { invalidKeys++; continue; }
+      const left = k.slice(0, idx);
+      const right = k.slice(idx + 1);
+      const nk = normalizeMatchupKey(left, right);
       if (nk !== k) mergedKeys++;
       const n = typeof v === 'number' && Number.isFinite(v) ? v : 0;
       if (!(typeof v === 'number' && Number.isFinite(v))) nonNumberValues++;
