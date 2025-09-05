@@ -7,6 +7,20 @@ header,footer{background:#0f0f0f}
 header{border-bottom:3px solid var(--accent)}
 footer{border-top:2px solid var(--accent)}
 main{padding:16px;max-width:980px;margin:0 auto}
+.hero{position:relative;isolation:isolate;border-radius:16px;padding:48px 28px;margin:16px auto;background:radial-gradient(1200px 600px at 10% -10%, #2a0a0e 12%, transparent 60%),radial-gradient(900px 520px at 110% 10%, #3b0f15 12%, transparent 60%),linear-gradient(180deg,#20060a,#0b0b0b);border:1px solid #3a0d12;box-shadow:0 28px 70px rgba(0,0,0,.65)}
+.hero h1{margin:0 0 10px 0;font-weight:900;letter-spacing:.2px;font-size:36px}
+.hero p{margin:0 0 18px 0;color:#e9d9db}
+.hero .cta{display:flex;gap:12px;flex-wrap:wrap}
+.hero .cta .btn{font-weight:700}
+.badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.badges .pill{background:#2a0a0e;border-color:#4b0f18}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.tile{border:1px solid var(--border);border-radius:var(--radius);padding:14px;background:#121212;box-shadow:var(--shadow)}
+.tile h3{margin:0 0 8px 0}
+.band{margin:22px 0;padding:18px;border-radius:14px;background:linear-gradient(90deg,#3b0f15,#1a0a0c);border:1px solid #3a0d12;display:flex;gap:12px;align-items:center;justify-content:space-between}
+.band strong{font-weight:800}
+.btn.ghost{border-color:#3a0d12;background:transparent}
+.btn.ghost:hover{background:#160508}
 .hero{position:relative;isolation:isolate;border-radius:16px;padding:36px 24px;margin:16px auto;background:radial-gradient(1200px 600px at 10% -10%, #2a0a0e 10%, transparent 60%),radial-gradient(900px 520px at 110% 10%, #3b0f15 10%, transparent 60%),linear-gradient(180deg,#160306,#0b0b0b);border:1px solid #3a0d12;box-shadow:0 20px 50px rgba(0,0,0,.6)}
 .hero h1{margin:0 0 8px 0;font-weight:900;letter-spacing:.2px}
 .hero p{margin:0 0 16px 0;color:#e9d9db}
